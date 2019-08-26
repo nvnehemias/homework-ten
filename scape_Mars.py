@@ -17,6 +17,7 @@ mars_scrape_info = {}
 
 # NASA Mars News
 def scrape_news():
+
     # URL of page to be scraped
     url_1 = "https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest"
 
@@ -47,4 +48,89 @@ def scrape_news():
     news_p = new_list_title[0]
     news_p
 
+
+# Featured Image
 def featured_image_scrape():
+
+    # URL of page to be scraped
+    url_2 = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
+
+    #Visit website
+    browser.visit(url_2)
+
+    #Parse html with Beautiful Soup
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')
+
+    #
+    new_result = soup.find_all('article')
+    split_url = new_result[0].attrs['style'][23:-3]
+    featured_image_url = f"https://www.jpl.nasa.gov{split_url}"
+    featured_image_url
+
+
+# Mars Weather
+def scrape_mars_weather():
+
+    # URL of page to be scraped
+    url_3 = "https://twitter.com/marswxreport?lang=en"
+
+    #Visit website
+    browser.visit(url_3)
+
+    #Parse html with Beautiful Soup
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')
+
+    #
+    results_3 = soup.find_all('p', class_ = "TweetTextSize TweetTextSize--normal js-tweet-text tweet-text")
+    mars_weather = print(results_3[0].text[0:-26])
+    mars_weather
+
+# Mars Facts
+def scrape_mars_facts():
+
+    # URL of page to be scraped
+    url_4 = "https://space-facts.com/mars/"
+
+    #Visit website
+    browser.visit(url_4)
+
+    #read html to pandas dataframe
+    df = pd.read_html(url_4)
+
+    #Rename columns
+    df1.columns = ["description","Value"]
+
+    #Setting index
+    df1.set_index("description", inplace = True)
+
+    #Convert dataframe to html
+    df1.to_html()
+
+# Mars Hemispheres
+def scrape_mars_hemispheres():
+
+    # URL of page to be scraped
+    url_5 = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+
+    #Visit website
+    browser.visit(url_5)
+
+    #Parse html with Beautiful Soup
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')
+
+    #
+    new_images = soup.find_all("img",class_ = "thumb")
+
+    #
+    hemisphere_image_urls = []
+    list_names = ["Cerberus Hemisphere","Schiaparelli Hemisphere","Syrtis Major Hemisphere","Valles Marineris Hemisphere"]
+
+    #
+    for i in range(len(new_images)):
+        src_url = new_images[i].attrs["src"]
+        dictionary = {"title": list_names[i],"image url": f"https://astrogeology.usgs.gov{src_url}"}
+        hemisphere_image_urls.append(dictionary)
+
