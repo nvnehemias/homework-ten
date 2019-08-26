@@ -36,7 +36,6 @@ def scrape_news():
     for answer in results:
         list_title.append(answer.text)
     news_title = list_title[0]
-    news_title
 
     #Attain the div class and create a new empty list
     results_2 = soup.find_all('div',class_ = "article_teaser_body")
@@ -46,7 +45,11 @@ def scrape_news():
     for answer in results_2:
         new_list_title.append(answer.text)
     news_p = new_list_title[0]
-    news_p
+
+    mars_scrape_info["news_title"] = news_title
+    mars_scrape_info["news_paragraph"] = news_p
+
+    return mars_scrape_info
 
 
 # Featured Image
@@ -66,7 +69,11 @@ def featured_image_scrape():
     new_result = soup.find_all('article')
     split_url = new_result[0].attrs['style'][23:-3]
     featured_image_url = f"https://www.jpl.nasa.gov{split_url}"
-    featured_image_url
+    
+    
+    mars_scrape_info["featured_image_url"] = featured_image_url
+    return mars_scrape_info
+
 
 
 # Mars Weather
@@ -85,7 +92,10 @@ def scrape_mars_weather():
     #
     results_3 = soup.find_all('p', class_ = "TweetTextSize TweetTextSize--normal js-tweet-text tweet-text")
     mars_weather = print(results_3[0].text[0:-26])
-    mars_weather
+     
+     
+    mars_scrape_info["mars_weather"] = mars_weather
+    return mars_scrape_info
 
 # Mars Facts
 def scrape_mars_facts():
@@ -106,7 +116,10 @@ def scrape_mars_facts():
     df1.set_index("description", inplace = True)
 
     #Convert dataframe to html
-    df1.to_html()
+    data = df1.to_html()
+
+    mars_scrape_info["mars_facts"] = data
+    return mars_scrape_info
 
 # Mars Hemispheres
 def scrape_mars_hemispheres():
@@ -134,3 +147,6 @@ def scrape_mars_hemispheres():
         dictionary = {"title": list_names[i],"image url": f"https://astrogeology.usgs.gov{src_url}"}
         hemisphere_image_urls.append(dictionary)
 
+
+    mars_scrape_info["hemisphere_image_urls"] = hemisphere_image_urls
+    return mars_scrape_info
