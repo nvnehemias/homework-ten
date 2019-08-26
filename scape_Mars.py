@@ -65,7 +65,7 @@ def featured_image_scrape():
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
 
-    #
+    #Attain article tags and image url
     new_result = soup.find_all('article')
     split_url = new_result[0].attrs['style'][23:-3]
     featured_image_url = f"https://www.jpl.nasa.gov{split_url}"
@@ -89,7 +89,7 @@ def scrape_mars_weather():
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
 
-    #
+    #Attain the p tags and class and print tweet
     results_3 = soup.find_all('p', class_ = "TweetTextSize TweetTextSize--normal js-tweet-text tweet-text")
     mars_weather = print(results_3[0].text[0:-26])
      
@@ -134,14 +134,14 @@ def scrape_mars_hemispheres():
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
 
-    #
+    #Attain the image and thumb class 
     new_images = soup.find_all("img",class_ = "thumb")
 
-    #
+    #Empty list and names of hemispheres
     hemisphere_image_urls = []
     list_names = ["Cerberus Hemisphere","Schiaparelli Hemisphere","Syrtis Major Hemisphere","Valles Marineris Hemisphere"]
 
-    #
+    #For loop to obtain complete url
     for i in range(len(new_images)):
         src_url = new_images[i].attrs["src"]
         dictionary = {"title": list_names[i],"image url": f"https://astrogeology.usgs.gov{src_url}"}
