@@ -5,12 +5,13 @@ import pandas as pd
 import requests
 import re
 
-mars_scrape_info = {}
+#mars_scrape_info = {}
 
 def browser_start():
     #https://splinter.readthedocs.io/en/latest/drivers/chrome.html
     #!which chromedriver
-    executable_path = {'executable_path': '/Users/nehemias/Downloads/chromedriver'}
+    #executable_path = {'executable_path': '/Users/nehemias/Downloads/chromedriver'}
+    executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
     return Browser('chrome', **executable_path, headless=False)
 
 
@@ -18,9 +19,8 @@ def browser_start():
 # NASA Mars News
 def scrape():
 
-    mars_scrape_info = {}
-
     browser = browser_start()
+    mars_scrape_info = {}
     
     # URL of page to be scraped
     news_url = "https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest"
@@ -33,31 +33,15 @@ def scrape():
     soup = BeautifulSoup(html, 'html.parser')
 
     #Attain the div class and create a new empty list
-    results = soup.find_all('div',class_ = "content_title")
-    list_title = []
+    news_title = soup.find('div',class_ = "content_title").text
 
-    #Run for loop that outputs the news title 
-    for answer in results:
-        list_title.append(answer.text)
-    news_title = list_title[0]
 
     #Attain the div class and create a new empty list
-    results_2 = soup.find_all('div',class_ = "article_teaser_body")
-    new_list_title = []
-
-    #Run for loop that outputs the news paragraph
-    for answer in results_2:
-        new_list_title.append(answer.text)
-    news_p = new_list_title[0]
+    news_p = soup.find('div',class_ = "article_teaser_body").text
 
     mars_scrape_info["news_title"] = news_title
     mars_scrape_info["news_paragraph"] = news_p
 
-    #return mars_scrape_info
-
-
-    # Featured Image
-    #def featured_image_scrape():
 
     # URL of page to be scraped
     image_url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
@@ -76,12 +60,7 @@ def scrape():
     
     
     mars_scrape_info["featured_image_url"] = featured_image_url
-    #return mars_scrape_info
 
-
-
-    # Mars Weather
-    #def scrape_mars_weather():
 
     # URL of page to be scraped
     weather_url = "https://twitter.com/marswxreport?lang=en"
@@ -96,12 +75,7 @@ def scrape():
     #Attain the p tags and class and print tweet
     mars_tweet = soup.find('p', class_ = "TweetTextSize TweetTextSize--normal js-tweet-text tweet-text").text
     mars_scrape_info["mars_weather"] = mars_tweet
-        
-     
-    #return mars_scrape_info
-
-    # Mars Facts
-    #def scrape_mars_facts():
+    
 
     # URL of page to be scraped
     mars_facts_url = "https://space-facts.com/mars/"
@@ -127,10 +101,9 @@ def scrape():
     data = data.replace("\n", "")
 
     mars_scrape_info["mars_facts"] = data
-    #return mars_scrape_info
 
     # Mars Hemispheres
-    #def scrape_mars_hemispheres():
+
 
     # URL of page to be scraped
     hemispheres_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
@@ -146,7 +119,7 @@ def scrape():
     new_images = soup.find_all("img",class_ = "thumb")
 
     #Empty list and names of hemispheres
-    hemisphere_image_urls = []
+    hemisphere_image_urls = [];
     list_names = ["Cerberus Hemisphere","Schiaparelli Hemisphere","Syrtis Major Hemisphere","Valles Marineris Hemisphere"]
 
     #For loop to obtain complete url
