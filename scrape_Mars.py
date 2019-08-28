@@ -5,24 +5,28 @@ import pandas as pd
 import requests
 import re
 
+mars_scrape_info = {}
 
 def browser_start():
     #https://splinter.readthedocs.io/en/latest/drivers/chrome.html
     #!which chromedriver
     executable_path = {'executable_path': '/Users/nehemias/Downloads/chromedriver'}
-    browser = Browser('chrome', **executable_path, headless=False)
+    return Browser('chrome', **executable_path, headless=False)
 
-mars_scrape_info = {}
 
 
 # NASA Mars News
-def scrape_news():
+def scrape():
 
+    mars_scrape_info = {}
+
+    browser = browser_start()
+    
     # URL of page to be scraped
-    url_1 = "https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest"
+    news_url = "https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest"
 
     #Visit website
-    browser.visit(url_1)
+    browser.visit(news_url)
 
     #Parse html with Beautiful Soup
     html = browser.html
@@ -49,17 +53,17 @@ def scrape_news():
     mars_scrape_info["news_title"] = news_title
     mars_scrape_info["news_paragraph"] = news_p
 
-    return mars_scrape_info
+    #return mars_scrape_info
 
 
-# Featured Image
-def featured_image_scrape():
+    # Featured Image
+    #def featured_image_scrape():
 
     # URL of page to be scraped
-    url_2 = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
+    image_url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
 
     #Visit website
-    browser.visit(url_2)
+    browser.visit(image_url)
 
     #Parse html with Beautiful Soup
     html = browser.html
@@ -72,43 +76,45 @@ def featured_image_scrape():
     
     
     mars_scrape_info["featured_image_url"] = featured_image_url
-    return mars_scrape_info
+    #return mars_scrape_info
 
 
 
-# Mars Weather
-def scrape_mars_weather():
+    # Mars Weather
+    #def scrape_mars_weather():
 
     # URL of page to be scraped
-    url_3 = "https://twitter.com/marswxreport?lang=en"
+    weather_url = "https://twitter.com/marswxreport?lang=en"
 
     #Visit website
-    browser.visit(url_3)
+    browser.visit(weather_url)
 
     #Parse html with Beautiful Soup
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
 
     #Attain the p tags and class and print tweet
-    results_3 = soup.find_all('p', class_ = "TweetTextSize TweetTextSize--normal js-tweet-text tweet-text")
-    mars_weather = print(results_3[0].text[0:-26])
+    mars_tweet = soup.find('p', class_ = "TweetTextSize TweetTextSize--normal js-tweet-text tweet-text").text
+    mars_scrape_info["mars_weather"] = mars_tweet
+        
      
-     
-    mars_scrape_info["mars_weather"] = mars_weather
-    return mars_scrape_info
+    #return mars_scrape_info
 
-# Mars Facts
-def scrape_mars_facts():
+    # Mars Facts
+    #def scrape_mars_facts():
 
     # URL of page to be scraped
-    url_4 = "https://space-facts.com/mars/"
+    mars_facts_url = "https://space-facts.com/mars/"
 
     #Visit website
-    browser.visit(url_4)
+    browser.visit(mars_facts_url)
 
     #read html to pandas dataframe
-    df = pd.read_html(url_4)
+    df = pd.read_html(mars_facts_url)
 
+    #Dataframe  
+    df1 = df[1]
+    
     #Rename columns
     df1.columns = ["description","Value"]
 
@@ -118,17 +124,19 @@ def scrape_mars_facts():
     #Convert dataframe to html
     data = df1.to_html()
 
-    mars_scrape_info["mars_facts"] = data
-    return mars_scrape_info
+    data = data.replace("\n", "")
 
-# Mars Hemispheres
-def scrape_mars_hemispheres():
+    mars_scrape_info["mars_facts"] = data
+    #return mars_scrape_info
+
+    # Mars Hemispheres
+    #def scrape_mars_hemispheres():
 
     # URL of page to be scraped
-    url_5 = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+    hemispheres_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
 
     #Visit website
-    browser.visit(url_5)
+    browser.visit(hemispheres_url)
 
     #Parse html with Beautiful Soup
     html = browser.html
@@ -149,4 +157,8 @@ def scrape_mars_hemispheres():
 
 
     mars_scrape_info["hemisphere_image_urls"] = hemisphere_image_urls
+
+
+
+    browser.quit()
     return mars_scrape_info
