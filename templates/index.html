@@ -21,12 +21,29 @@
 
 
     <!-- Craigslist Listings -->
-    <div class="row" id="craiglist-listings">
+    <div class="row" id="mars-info">
       <div class="col-md-12">
         <h2 class="heading">Lastest Mars News</h2>
-        <small>{{"news_title"}}</small>
+        <h3>{{listings.news_title}}</h3>
+        <p>{{listings.news_paragraph}}</p>
       </div>
     </div>
+
+    
+      <div class = "row" id = "mars-info">
+        <div class = "col-md-8">
+          <h2>Featured Mars Image</h2>
+          <img src="{{listings.featured_image_url}}" alt="featured image" style="width: 100%;">
+        </div> 
+        <div class = "col-md-4">
+          <h4>Current Weather on Mars</h4>
+          <p>{{listings.mars_weather}}</p>
+          <h4>Mars Facts</h4>
+          {{listings.mars_facts|safe}}
+          <a href= "{{listings.mars_facts}}"></a>
+        </div>
+      </div>
+    
 
   </div>
 </body>
