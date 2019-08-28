@@ -44,6 +44,30 @@
         </div>
       </div>
     
+    <div class = "row" id = "mars-info">
+      <div class = "col-md -12">
+        <h2 class="text-center">Mars Hemispheres</h2>
+      </div>
+    </div>
+
+    <div class = "card deck" id = "mars-info">
+      <hr>
+      <div class = "col-md-12">
+        <div class = "row">
+          {% for images in listings.hemisphere_image_urls %}
+          <div class="col-md-6">
+            <div class="card text-white bg-dark" style="margin: 80px;">
+              <img class="card-img-top" src=" {{images.image_url}} " style="width: 100%;"/>
+              <div class = "card-body">
+                <p class = "card-text">{{images.title}}</p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
 
   </div>
 </body>

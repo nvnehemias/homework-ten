@@ -10,8 +10,8 @@ import re
 def browser_start():
     #https://splinter.readthedocs.io/en/latest/drivers/chrome.html
     #!which chromedriver
-    #executable_path = {'executable_path': '/Users/nehemias/Downloads/chromedriver'}
-    executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
+    executable_path = {'executable_path': '/Users/nehemias/Downloads/chromedriver'}
+    #executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
     return Browser('chrome', **executable_path, headless=False)
 
 
@@ -119,18 +119,17 @@ def scrape():
     new_images = soup.find_all("img",class_ = "thumb")
 
     #Empty list and names of hemispheres
-    hemisphere_image_urls = [];
+    hemisphere_image_urls = []
     list_names = ["Cerberus Hemisphere","Schiaparelli Hemisphere","Syrtis Major Hemisphere","Valles Marineris Hemisphere"]
 
     #For loop to obtain complete url
     for i in range(len(new_images)):
         src_url = new_images[i].attrs["src"]
-        dictionary = {"title": list_names[i],"image url": f"https://astrogeology.usgs.gov{src_url}"}
+        dictionary = {"title": list_names[i],"image_url": f"https://astrogeology.usgs.gov{src_url}"}
         hemisphere_image_urls.append(dictionary)
 
 
     mars_scrape_info["hemisphere_image_urls"] = hemisphere_image_urls
-
 
 
     browser.quit()
